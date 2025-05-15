@@ -5,12 +5,16 @@ export interface StatusCardProps {
   title: string;
   subtitle?: string;
   variant?: "success" | "error";
+  children?: React.ReactNode;
+  className?: string;
 }
 
 export function StatusCard({
   title,
   subtitle,
   variant = "success",
+  children,
+  className,
 }: StatusCardProps) {
   const getIcon = () => {
     if (variant === "success") {
@@ -22,7 +26,8 @@ export function StatusCard({
   return (
     <div
       className={classNames(
-        "w-full mt-4 p-4 rounded-lg flex items-center gap-3",
+        "w-full mt-4 p-4 rounded-lg flex items-start gap-3",
+        className,
         variant === "success"
           ? "bg-green-50 border border-green-200"
           : "bg-red-50 border border-red-200"
@@ -55,6 +60,7 @@ export function StatusCard({
             {subtitle}
           </p>
         )}
+        {children}
       </div>
     </div>
   );

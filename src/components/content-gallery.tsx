@@ -70,6 +70,7 @@ export function ContentGallery({
                   fill
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 33vw, 25vw"
                   className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  unoptimized={item.url.includes(".gif")}
                 />
               ) : (
                 <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
@@ -143,7 +144,7 @@ export function ContentGallery({
         isOpen={isOpen}
       >
         <ModalContent className="w-fit h-fit max-w-[90vw] max-h-[90vh] p-0! bg-transparent!">
-          {selectedContent && (
+          {selectedContent?.url && (
             <Image
               src={selectedContent.url}
               alt="Enlarged view"
@@ -151,6 +152,7 @@ export function ContentGallery({
               height={400}
               priority
               className="object-contain max-w-[90vw] max-h-[90vh]"
+              unoptimized={selectedContent.url?.includes(".gif")}
             />
           )}
         </ModalContent>

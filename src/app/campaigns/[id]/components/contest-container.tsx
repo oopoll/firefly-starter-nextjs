@@ -7,7 +7,7 @@ import { UploadIcon } from "lucide-react";
 import { useRef } from "react";
 import { useState } from "react";
 import { ContentGallery, ContentGalleryProps, StatusCard } from "@/components";
-import { createPhotoContestSubmission } from "./actions";
+import { createPhotoContestSubmission } from "../actions";
 
 export interface ContestContainerProps {
   campaign: components["schemas"]["Campaign"];

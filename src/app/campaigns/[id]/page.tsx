@@ -1,20 +1,24 @@
 import client from "@/lib/api-client";
 import { notFound } from "next/navigation";
-import { PollContainer } from "./poll-container";
 import { getCampaignType } from "@/lib/campaign-utils";
-import { ContestContainer } from "./contest-container";
 import { listPhotoContestSubmissions } from "./actions";
+import { Suspense } from "react";
+import CampaignPageLoading from "./loading";
+import { PollContainer } from "./components/poll-container";
+import { ContestContainer } from "./components/contest-container";
 
 export interface CampaignPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function CampaignPage({ params }: CampaignPageProps) {
-  const { id } = await params;
-
+export async function CampaignPageContent({
+  campaignId,
+}: {
+  campaignId: string;
+}) {
   // Fetch the campaign
   const { data: campaign, response } = await client.GET(`/v1/campaigns/{id}`, {
-    params: { path: { id } },
+    params: { path: { id: campaignId } },
   });
 
   if (!campaign) {
@@ -32,7 +36,7 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
 
   // Get the campaign form (assuming there's only one)
   const { data: forms } = await client.GET("/v1/campaigns/{id}/forms", {
-    params: { path: { id } },
+    params: { path: { id: campaignId } },
   });
   const form = forms?.data[0];
   if (!form) {
@@ -40,20 +44,7 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
   }
 
   if (campaignType === "poll") {
-    // Get field aggregate data from the form to display poll results
-    const { data: aggregateData } = await client.GET(
-      "/v1/forms/{id}/fields/aggregate",
-      {
-        params: { path: { id: form.id } },
-      }
-    );
-
-    const results = aggregateData?.data;
-    if (!results) {
-      notFound();
-    }
-
-    return <PollContainer campaign={campaign} form={form} results={results} />;
+    return <PollContainer campaign={campaign} form={form} />;
   }
 
   const photoSubmissions = await listPhotoContestSubmissions(form.id);
@@ -64,5 +55,15 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
       form={form}
       submissions={photoSubmissions}
     />
+  );
+}
+
+export default async function CampaignPage({ params }: CampaignPageProps) {
+  const { id } = await params;
+
+  return (
+    <Suspense fallback={<CampaignPageLoading />}>
+      <CampaignPageContent campaignId={id} />
+    </Suspense>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { forwardRef, useRef, useState } from "react";
 import { PlayIcon, PauseIcon } from "lucide-react";
 import Image from "next/image";
@@ -21,15 +23,15 @@ const ContentCarouselSlide = forwardRef<
         if (videoRef.current.paused) {
           const playPromise = videoRef.current.play();
           if (playPromise !== undefined) {
-            playPromise.catch(() => {
-              // Ignore failed play attempts
+            playPromise.catch((e) => {
+              console.error(e);
             });
           }
         } else {
           videoRef.current.pause();
         }
       } catch (error) {
-        // Ignore playback errors
+        console.error(error);
       }
     }
   };
@@ -48,7 +50,6 @@ const ContentCarouselSlide = forwardRef<
             ref={(ref) => {
               if (ref) {
                 videoRef.current = ref;
-                // Don't set currentTime here as it can cause issues on mobile
               }
             }}
             src={media}
@@ -77,7 +78,7 @@ const ContentCarouselSlide = forwardRef<
           </div>
         </div>
       )}
-      {typeof media === "string" && (
+      {type === "TEXT" && typeof media === "string" && (
         <div className="absolute inset-0 flex items-center justify-center">
           <p className="text-white">{media}</p>
         </div>
