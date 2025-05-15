@@ -4,3 +4,4 @@ export * from "./content-gallery";
 export * from "./radio-group";
 export * from "./button";
 export * from "./status-card";
+export * from "./campaign-header";

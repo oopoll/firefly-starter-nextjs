@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PollContainer } from "./poll-container";
 import { getCampaignType } from "@/lib/campaign-utils";
 import { ContestContainer } from "./contest-container";
+import { listPhotoContestSubmissions } from "./actions";
 
 export interface CampaignPageProps {
   params: Promise<{ id: string }>;
@@ -55,5 +56,13 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
     return <PollContainer campaign={campaign} form={form} results={results} />;
   }
 
-  return <ContestContainer campaign={campaign} form={form} />;
+  const photoSubmissions = await listPhotoContestSubmissions(form.id);
+
+  return (
+    <ContestContainer
+      campaign={campaign}
+      form={form}
+      submissions={photoSubmissions}
+    />
+  );
 }

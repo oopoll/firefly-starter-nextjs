@@ -3,16 +3,22 @@ import classNames from "classnames";
 
 export interface StatusCardProps {
   title: string;
+  subtitle?: string;
   variant?: "success" | "error";
 }
 
-export function StatusCard({ title, variant = "success" }: StatusCardProps) {
+export function StatusCard({
+  title,
+  subtitle,
+  variant = "success",
+}: StatusCardProps) {
   const getIcon = () => {
     if (variant === "success") {
       return <CheckIcon className="w-5 h-5 text-green-600" />;
     }
     return <AlertCircleIcon className="w-5 h-5 text-red-600" />;
   };
+
   return (
     <div
       className={classNames(
@@ -22,7 +28,14 @@ export function StatusCard({ title, variant = "success" }: StatusCardProps) {
           : "bg-red-50 border border-red-200"
       )}
     >
-      <div className="bg-green-100 p-2 rounded-lg">{getIcon()}</div>
+      <div
+        className={classNames(
+          "p-2 rounded-lg",
+          variant === "success" ? "bg-green-100" : "bg-red-100"
+        )}
+      >
+        {getIcon()}
+      </div>
       <div>
         <h3
           className={classNames(
@@ -32,6 +45,16 @@ export function StatusCard({ title, variant = "success" }: StatusCardProps) {
         >
           {title}
         </h3>
+        {subtitle && (
+          <p
+            className={classNames(
+              "text-sm",
+              variant === "success" ? "text-green-600" : "text-red-600"
+            )}
+          >
+            {subtitle}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -1,12 +1,11 @@
 import React, { forwardRef, useRef, useState } from "react";
 import { PlayIcon, PauseIcon } from "lucide-react";
+import Image from "next/image";
 
 export interface ContentCarouselSlideProps {
   type: string;
   autoPlay?: boolean;
-  media: {
-    url: string;
-  };
+  media: string;
 }
 
 const ContentCarouselSlide = forwardRef<
@@ -41,7 +40,7 @@ const ContentCarouselSlide = forwardRef<
       className="aspect-[9/13] rounded-lg overflow-hidden relative"
     >
       {type === "IMAGE" && (
-        <img src={media.url} alt="Content" className="object-cover" />
+        <Image src={media} alt="Content" className="object-cover" />
       )}
       {type === "VIDEO" && (
         <div className="relative w-full h-full" onClick={togglePlay}>
@@ -52,7 +51,7 @@ const ContentCarouselSlide = forwardRef<
                 // Don't set currentTime here as it can cause issues on mobile
               }
             }}
-            src={media.url}
+            src={media}
             loop
             preload="metadata"
             className="absolute inset-0 w-full h-full object-cover"
@@ -76,6 +75,11 @@ const ContentCarouselSlide = forwardRef<
               )}
             </div>
           </div>
+        </div>
+      )}
+      {typeof media === "string" && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <p className="text-white">{media}</p>
         </div>
       )}
     </div>

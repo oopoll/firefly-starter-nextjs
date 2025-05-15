@@ -8,6 +8,8 @@ import { VoteResults } from "./vote-results";
 import { Button } from "@/components";
 import { vote } from "./actions";
 import { StatusCard } from "@/components";
+import { CampaignHeader } from "@/components/campaign-header";
+import { Card } from "@/components/card";
 
 export interface PollContainerProps {
   campaign: components["schemas"]["Campaign"];
@@ -114,14 +116,8 @@ function CarouselPoll({
         />
       </div>
       <div className="w-full lg:w-1/2 flex flex-col gap-4">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">{campaign.name}</h2>
-          {campaign.publishDate && (
-            <h3 className="text-sm text-gray-500">
-              {new Date(campaign.publishDate).toLocaleDateString()}
-            </h3>
-          )}
-          <p className="text-sm text-gray-500">{campaign.description}</p>
+        <Card>
+          <CampaignHeader campaign={campaign} />
           {voted && (
             <>
               <VoteResults results={currentResults[0]} />
@@ -133,7 +129,7 @@ function CarouselPoll({
             <>
               <RadioGroup
                 options={selectField.options.map((option) => option.value)}
-                className="mt-4"
+                className="mt-2"
                 onChange={(value) => setSelection(value)}
                 value={selection}
               />
@@ -147,8 +143,7 @@ function CarouselPoll({
               </Button>
             </>
           )}
-        </div>
-        {/* {filler.type === "poll" && voted && !user && <SignInCta />} */}
+        </Card>
       </div>
     </div>
   );
@@ -176,17 +171,10 @@ function GalleryPoll({
   });
   return (
     <div>
-      <div className="mb-4 sm:mb-8">
-        <h1 className="text-2xl font-bold text-center">{campaign.name}</h1>
-        <h2 className="text-sm text-gray-500 text-center">
-          {campaign.description}
-        </h2>
-        {campaign.publishDate && (
-          <h3 className="text-sm text-gray-500 text-center">
-            {new Date(campaign.publishDate).toLocaleDateString()}
-          </h3>
-        )}
-      </div>
+      <CampaignHeader
+        campaign={campaign}
+        className="mb-4 sm:mb-8 text-center"
+      />
       <ContentGallery
         className="mt-4"
         content={options}
@@ -233,7 +221,6 @@ function GalleryPoll({
           </div>
         )}
         {error && <StatusCard title={error} variant="error" />}
-        {/* {voted && !user && <SignInCta className="w-full" />} */}
       </div>
     </div>
   );

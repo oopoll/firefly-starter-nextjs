@@ -31,13 +31,12 @@ export function ContentCarousel({
   }, [value, field.options]);
 
   const handleSlideChange = (swiper: SwiperClass) => {
-    // Pause all videos with error handling
     videoRefs.current.forEach((video) => {
       if (video) {
         try {
           video.pause();
         } catch (error) {
-          // Ignore pause errors
+          console.error(error);
         }
       }
     });
@@ -50,12 +49,12 @@ export function ContentCarousel({
         try {
           const playPromise = currentVideo.play();
           if (playPromise !== undefined) {
-            playPromise.catch(() => {
-              // Ignore failed play attempts
+            playPromise.catch((e) => {
+              console.error(e);
             });
           }
         } catch (error) {
-          // Ignore playback errors
+          console.error(error);
         }
       }
     }
@@ -65,11 +64,16 @@ export function ContentCarousel({
 
   const slides = useMemo(() => {
     return field.options.map((option, index) => {
+      const contentVersion = option.content?.defaultVersion;
+      const media =
+        contentVersion && contentVersion?.type !== "TEXT"
+          ? contentVersion.url
+          : option.value;
       return (
         <SwiperSlide key={option.value}>
           <ContentCarouselSlide
-            type={option.content?.type ?? undefined}
-            media={option.content?.defaultVersion ?? undefined}
+            type={option.content?.type ?? "TEXT"}
+            media={media}
             autoPlay={index === 0}
             ref={(el) => {
               if (el?.querySelector("video")) {

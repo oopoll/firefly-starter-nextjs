@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Modal, { ModalContent } from "./modal";
 import { components } from "@/lib/api-schema";
+import { FileQuestionIcon } from "lucide-react";
 
 type PollResults = Pick<
   components["schemas"]["FormFieldAggregate"],
@@ -11,7 +12,7 @@ type PollResults = Pick<
 >;
 
 interface Content {
-  url: string;
+  url: string | null;
   value: string;
   onClick?: (id: string) => void;
 }
@@ -62,13 +63,19 @@ export function ContentGallery({
             }}
           >
             <div className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer">
-              <Image
-                src={item.url}
-                alt="Gallery image"
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-cover transition-transform duration-300 group-hover:scale-110"
-              />
+              {item.url ? (
+                <Image
+                  src={item.url}
+                  alt="Gallery image"
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+                  <FileQuestionIcon className="w-10 h-10 text-gray-500" />
+                </div>
+              )}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
               {showResults && results && (
                 <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 pt-6 bg-gradient-to-t from-black via-black/80 to-transparent">
