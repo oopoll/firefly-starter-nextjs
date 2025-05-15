@@ -23,6 +23,10 @@ This is a starter project that demonstrates how to integrate with the Firefly AP
 
 ## Learn More
 
+Browse the [Firefly API documentation](https://api.firefly.oopoll.com/docs) for an overview of currently available endpoints.
+
+> **NOTE**: The API is currently in active development and subject to change until stated otherwise.
+
 For more information about the stack used in this project:
 - [Next.js](https://nextjs.org) - React framework
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
